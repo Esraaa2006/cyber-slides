@@ -9,31 +9,26 @@
 </head>
 <body>
 
-  <!-- إضاءات خلفية فخمة -->
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
 
   <main class="presentation-container">
-    <!-- شريط التقدم العلوي -->
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
     </div>
 
-    <!-- الشريحة 1 -->
     <section class="slide active">
       <span class="badge">عرض تقديمي</span>
       <h1>أساسيات الأمن السيبراني</h1>
       <p class="subtitle">كيف نحمي بياناتنا وحساباتنا في العالم الرقمي بأسلوب واعٍ واحترافي؟</p>
     </section>
 
-    <!-- الشريحة 2 -->
     <section class="slide">
       <span class="step-label">01 / المقدمة</span>
       <h2>لماذا يهمنا الأمن السيبراني؟</h2>
       <p>مع تزايد اعتمادنا على التطبيقات والخدمات الإلكترونية، أصبحت حماية المعلومات الشخصية والمهنية ضرورة يومية لتفادي الاختراق والاحتيال الرقمي.</p>
     </section>
 
-    <!-- الشريحة 3 -->
     <section class="slide">
       <span class="step-label">02 / المحاور الأساسية</span>
       <h2>ركائز الحماية اليومية</h2>
@@ -59,50 +54,57 @@
       </ul>
     </section>
 
-    <!-- الشريحة 4 -->
     <section class="slide">
       <span class="step-label">03 / الخاتمة</span>
       <h2>الوعي هو خط الدفاع الأول</h2>
       <p>الأمن الرقمي يبدأ بعادات بسيطة وواعية كل يوم. شكرًا لحسن استماعكم.</p>
     </section>
 
-    <!-- أزرار التحكم -->
     <div class="controls">
-      <button id="prevBtn" onclick="changeSlide(-1)">→ السابق</button>
+      <button type="button" id="prevBtn">→ السابق</button>
       <span id="slideCounter">01 / 04</span>
-      <button id="nextBtn" class="primary-btn" onclick="changeSlide(1)">التالي ←</button>
+      <button type="button" id="nextBtn" class="primary-btn">التالي ←</button>
     </div>
   </main>
 
   <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const counter = document.getElementById('slideCounter');
-    const progressFill = document.getElementById('progressFill');
+    document.addEventListener("DOMContentLoaded", function () {
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const counter = document.getElementById("slideCounter");
+      const progressFill = document.getElementById("progressFill");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
 
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
+      function showSlide(index) {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("active", i === index);
+        });
+
+        const currentNum = String(index + 1).padStart(2, "0");
+        const totalNum = String(slides.length).padStart(2, "0");
+        if (counter) counter.textContent = ${currentNum} / ${totalNum};
+
+        if (progressFill) {
+          progressFill.style.width = ${((index + 1) / slides.length) * 100}%;
+        }
+      }
+
+      function changeSlide(step) {
+        currentSlide = (currentSlide + step + slides.length) % slides.length;
+        showSlide(currentSlide);
+      }
+
+      if (nextBtn) nextBtn.addEventListener("click", () => changeSlide(1));
+      if (prevBtn) prevBtn.addEventListener("click", () => changeSlide(-1));
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") changeSlide(1);
+        if (e.key === "ArrowRight") changeSlide(-1);
       });
-      const currentNum = String(index + 1).padStart(2, '0');
-      const totalNum = String(slides.length).padStart(2, '0');
-      counter.textContent = ${currentNum} / ${totalNum};
-      
-      const progressPercent = ((index + 1) / slides.length) * 100;
-      progressFill.style.width = ${progressPercent}%;
-    }
 
-    function changeSlide(step) {
-      currentSlide = (currentSlide + step + slides.length) % slides.length;
-      showSlide(currentSlide);
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') changeSlide(1);
-      if (e.key === 'ArrowRight') changeSlide(-1);
+      showSlide(0);
     });
-
-    showSlide(0);
   </script>
 </body>
 </html>
