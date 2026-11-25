@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <div class="glow glow-1"></div>
   <div class="glow glow-2"></div>
 
@@ -35,21 +34,15 @@
       <ul>
         <li>
           <span class="icon">🔐</span>
-          <div>
-            <strong>كلمات مرور قوية:</strong> استخدام كلمات مرور طويلة ومختلفة لكل حساب مع تفعيل المصادقة الثنائية.
-          </div>
+          <div><strong>كلمات مرور قوية:</strong> استخدام كلمات مرور طويلة ومختلفة لكل حساب مع تفعيل المصادقة الثنائية.</div>
         </li>
         <li>
           <span class="icon">🛡️</span>
-          <div>
-            <strong>الحذر من الروابط:</strong> التحقق من مصدر الرسائل والروابط قبل فتحها لتجنب التصيد الاحتيالي.
-          </div>
+          <div><strong>الحذر من الروابط:</strong> التحقق من مصدر الرسائل والروابط قبل فتحها لتجنب التصيد الاحتيالي.</div>
         </li>
         <li>
           <span class="icon">⚡</span>
-          <div>
-            <strong>التحديث المستمر:</strong> تحديث الأنظمة والتطبيقات بانتظام لسد الثغرات الأمنية.
-          </div>
+          <div><strong>التحديث المستمر:</strong> تحديث الأنظمة والتطبيقات بانتظام لسد الثغرات الأمنية.</div>
         </li>
       </ul>
     </section>
@@ -68,43 +61,51 @@
   </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let currentSlide = 0;
-      const slides = document.querySelectorAll(".slide");
-      const counter = document.getElementById("slideCounter");
-      const progressFill = document.getElementById("progressFill");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+    const counter = document.getElementById("slideCounter");
+    const progressFill = document.getElementById("progressFill");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-      function showSlide(index) {
-        slides.forEach((slide, i) => {
-          slide.classList.toggle("active", i === index);
-        });
-
-        const currentNum = String(index + 1).padStart(2, "0");
-        const totalNum = String(slides.length).padStart(2, "0");
-        if (counter) counter.textContent = ${currentNum} / ${totalNum};
-
-        if (progressFill) {
-          progressFill.style.width = ${((index + 1) / slides.length) * 100}%;
+    function updatePresentation() {
+      slides.forEach((slide, idx) => {
+        if (idx === currentSlide) {
+          slide.classList.add("active");
+        } else {
+          slide.classList.remove("active");
         }
-      }
-
-      function changeSlide(step) {
-        currentSlide = (currentSlide + step + slides.length) % slides.length;
-        showSlide(currentSlide);
-      }
-
-      if (nextBtn) nextBtn.addEventListener("click", () => changeSlide(1));
-      if (prevBtn) prevBtn.addEventListener("click", () => changeSlide(-1));
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") changeSlide(1);
-        if (e.key === "ArrowRight") changeSlide(-1);
       });
 
-      showSlide(0);
+      const currentText = String(currentSlide + 1).padStart(2, "0");
+      const totalText = String(slides.length).padStart(2, "0");
+      counter.textContent = currentText + " / " + totalText;
+
+      const widthPercent = ((currentSlide + 1) / slides.length) * 100;
+      progressFill.style.width = widthPercent + "%";
+    }
+
+    nextBtn.addEventListener("click", function () {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updatePresentation();
     });
+
+    prevBtn.addEventListener("click", function () {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updatePresentation();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowLeft") {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updatePresentation();
+      } else if (event.key === "ArrowRight") {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        updatePresentation();
+      }
+    });
+
+    updatePresentation();
   </script>
 </body>
 </html>
